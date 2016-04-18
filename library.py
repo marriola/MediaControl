@@ -6,6 +6,18 @@ import pickle
 import os
 
 
+def dbg(data):
+    print("*** dbg: ", end='')
+    print(data)
+    return data
+
+def matches(field, goal):
+    return goal == "*" or field.upper() == goal.upper()
+
+def dict_to_list(dict):
+    return list(map(lambda x: x[1], dict.items()))
+
+
 class Library(object):
     def __init__(self, iconSize):
         self.ICON_SIZE = iconSize
@@ -80,15 +92,40 @@ class Library(object):
         return self.catalog(track)
 
 
-    def build_artists_store(self, store, letter=None):
-        if type(letter) is str:
-            filter_fun = lambda x: x.name[0].upper() == letter.upper()
-        elif callable(letter):
-            filter_fun = letter
+    def all_albums(self, artist):
+        return functools.reduce(lambda acc, val: ([] if acc == None else acc) + (dict_to_list(val.albums) if matches(val.name, artist) else []), dict_to_list(self.artists), [])
+
+    def all_tracks(self, album_filter, albums):
+        return functools.reduce(lambda acc, val: ([] if acc == None else acc) + (sorted(val.tracks, key=lambda x: x.track) if matches(val.title, album_filter) else []), albums, [])
+
+    def build_track_list(self, store, artist, album):
+        filter_fun = lambda x: x.artist.upper() == artist.upper() and x.album.upper() == album.upper()
+        albums = self.all_albums(artist)
+        self.track_store_list = self.all_tracks(album, albums)
+        
+        store.clear()
+        for track in self.track_store_list:
+            store.append(None, self.create_track(track))
+
+
+    def create_track(self, track):
+        return [track.track, track.title, track.album, track.year, track.artist]
+        
+
+    # list_filter type
+    # ------------------------------
+    # None              No filter
+    # function          The artist object is passed as a parameter for each artist. Returns True if the artist should be included.
+    # string (1 char)   Artists beginning with that letter are filtered
+    def build_artists_store(self, store, list_filter=None):
+        if type(list_filter) is str:
+            filter_fun = lambda x: x.name[0].upper() == list_filter.upper()
+        elif callable(list_filter):
+            filter_fun = list_filter
         else:
             filter_fun = lambda x: True
 
-        self.artists_store = filter(filter_fun, map(lambda x: x[1], self.artists.items()))
+        self.artists_store = [x for x in dict_to_list(self.artists) if filter_fun(x)]
         self.artists_store.sort(key=lambda x: x.name)
         
         store.clear()
@@ -96,30 +133,36 @@ class Library(object):
             store.append(None, self.create_artist(artist))
 
             
-    def build_albums_store(self, store, letter=None):
+    # list_filter type
+    # ------------------------------
+    # None              No filter
+    # function          The album object is passed as a parameter for each album. Returns True if the album should be included.
+    # string (1 char)   Albums beginning with that letter are filtered
+    # string (2+ chars) Albums by that artist are shown
+    def build_albums_store(self, store, list_filter=None):
         artist_filter = False
         
-        if letter == None:
+        if list_filter == None:
             filter_fun = lambda x: True
-        elif callable(letter):
-            filter_fun = letter
-        elif type(letter) is str or type(letter) is unicode:
-            if len(letter) == 1:
-                filter_fun = lambda x: x.title[0].upper() == letter.upper()
+        elif callable(list_filter):
+            filter_fun = list_filter
+        elif type(list_filter) is str or type(list_filter) is unicode:
+            if len(list_filter) == 1:
+                filter_fun = lambda x: x.title[0].upper() == list_filter.upper()
             else:
                 artist_filter = True
-                filter_fun = lambda x: x.artist.upper() == letter.upper()
+                filter_fun = lambda x: x.artist.upper() == list_filter.upper()
         else:
             filter_fun = None
         
-        self.albums_store = filter(filter_fun,
-                        reduce(lambda acc, val: ([] if acc == None else acc) + map(lambda x: x[1], val.albums.items()),
-                               map(lambda x: x[1], self.artists.items()),
-                               []))
+        self.albums_store = [x for x in
+                        functools.reduce(lambda acc, val: ([] if acc == None else acc) + dict_to_list(val.albums),
+                               dict_to_list(self.artists),
+                               []) if filter_fun(x)]
         self.albums_store.sort(key=lambda x: x.year)
 
         if artist_filter:
-            self.albums_store = [AllAlbums(letter)] + self.albums_store
+            self.albums_store = [AllAlbums(list_filter)] + self.albums_store
         
         store.clear()
         for album in self.albums_store:
