@@ -131,8 +131,8 @@
                     <property name="selection_mode">browse</property>
                     <property name="item_orientation">horizontal</property>
                     <property name="model">artistStore</property>
-                    <property name="columns">3</property>
-                    <property name="item_width">1</property>
+                    <property name="columns">1</property>
+                    <property name="item_width">200</property>
                     <property name="tooltip_column">1</property>
                     <property name="item_padding">5</property>
                     <property name="activate_on_single_click">True</property>

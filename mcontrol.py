@@ -43,7 +43,8 @@ class MediaControl(Gtk.Window):
 
         self.icon_view = self.glade.get_object("iconview3")
         self.icon_view.set_pixbuf_column(0)
-        self.icon_view.set_text_column(1)
+        #self.icon_view.set_text_column(1)
+        self.icon_view.set_markup_column(1)
         self.artist_store = self.glade.get_object("artistStore")
         self.do_filter()
         
@@ -55,14 +56,7 @@ class MediaControl(Gtk.Window):
         css.load_from_path("mcontrol.css")
 
         self.window.show_all()
-
-
-    def do_filter(self, filter=None):
-        #print(self.filter_mode)
-        if self.filter_mode:
-            self.library.build_albums_store(self.artist_store, filter)
-        else:
-            self.library.build_artists_store(self.artist_store, filter)
+        self.window.present()
 
 
     def toggle_filter_mode(self, button):
@@ -86,16 +80,25 @@ class MediaControl(Gtk.Window):
         self.btnPlayPause.set_image(self.imgPause if self.playing else self.imgPlay)
 
 
+    def do_filter(self, filter=None):
+        #print(self.filter_mode)
+        if self.filter_mode:
+            self.library.build_albums_store(self.artist_store, filter)
+        else:
+            self.library.build_artists_store(self.artist_store, filter)
+
+
     def filter_all(self, button):
         self.do_filter()
         
 
     def filter_number(self, button):
-        self.do_filter(lambda x: x.title[0].isdigit())
+        self.do_filter(lambda x: x.title[0].isdigit() if hasattr(x, "title") else x.name[0].isdigit())
         
 
     def filter_symbol(self, button):
-        self.do_filter(lambda x: not x.title[0].isalpha() and not x.title[0].isdigit())
+        self.do_filter(lambda x: (not x.title[0].isalpha() and not x.title[0].isdigit()) if hasattr(x, "title") else
+                                 (not x.name[0].isalpha() and not x.name[0].isdigit()))
         
     
     def filter_letter(self, button):

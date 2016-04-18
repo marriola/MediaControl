@@ -46,22 +46,15 @@ class Library(object):
         
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.lower().endswith(".mp3") and self.catalog(root + file):
+                if ((root + file) not in self.files and
+                    file.lower().endswith(".mp3") and
+                    self.catalog_mp3(root + file)):
                     n += 1
 
         print("catalogged " + str(n) + " new tracks")
 
 
-    def catalog(self, path):
-        if path in self.files:
-            return False
-
-        try:
-            track = Track.from_file(path)
-            self.files.add(path)
-        except Exception as e:
-            print("catalog failed (" + path + "): " + e.__str__())
-
+    def catalog(self, track):
         if track.artist not in self.artists:
             self.artists[track.artist] = Artist(track.artist, track.genre)
 
@@ -72,15 +65,30 @@ class Library(object):
 
         print("catalogged " + track.artist + " - " + track.album + " - " + track.title + " [" + str(track.length) + "] (" + str(track.year) + ")")
         return True
+        
+
+    def catalog_mp3(self, path):
+        if path in self.files:
+            return False
+
+        try:
+            track = Track.from_file(path)
+            self.files.add(path)
+        except Exception as e:
+            print("catalog failed (" + path + "): " + e.__str__())
+
+        return self.catalog(track)
 
 
     def build_artists_store(self, store, letter=None):
         if type(letter) is str:
-            artists = filter(lambda x: x.name[0].upper() == letter.upper(), map(lambda x: x[1], self.artists.items()))
+            filter_fun = lambda x: x.name[0].upper() == letter.upper()
         elif callable(letter):
-            artists = filter(letter, map(lambda x: x[1], self.artists))
+            filter_fun = letter
         else:
-            artists = map(lambda x: x[1], self.artists.items())
+            filter_fun = lambda x: True
+
+        artists = filter(filter_fun, map(lambda x: x[1], self.artists.items()))
             
         store.clear()
         for artist in artists:

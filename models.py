@@ -11,6 +11,7 @@ class Artist(object):
         self.name = name
         self.genres = genres
 
+
 class Album(object):
     def __init__(self, artist, title, genres, year):
         self.artist = artist
@@ -21,19 +22,20 @@ class Album(object):
 
 
     def __str__(self):
-        return self.artist + "\n" + self.title + "\n" + self.year.__str__()
+        return self.title + "\n<b>" + self.artist + "</b>\n" + self.year.__str__()
 
 
 class Track(object):
     def __init__(self, path, length, artist, album, year, track, title, genre):
         self.path = path
         self.length = length
-        self.artist = artist
-        self.album = album
+        self.artist = artist.strip() if artist else artist
+        self.album = album.strip() if album else album
         self.year = year
         self.track = track
-        self.title = title
-        self.genre = genre
+        self.title = title.strip() if title else title
+        self.genre = genre.strip() if genre else genre
+
 
     @staticmethod
     def from_file(path):
@@ -41,7 +43,6 @@ class Track(object):
         length = mp3.info.length
 
         id3 = ID3(path)
-        
         tracks = Track.get_value(id3.getall("TRCK"))
         titles = Track.get_value(id3.getall("TIT2"))
         albums = Track.get_value(id3.getall("TALB"))
@@ -54,13 +55,13 @@ class Track(object):
             if m:
                 track = int(m.group(0))
         else:
-            track = -1    
+            track = None
         
         title = titles if titles else "<no title>"
         album = albums if albums else "<no album>"
         artist = artists if artists else "<no artist>"
         genre = genres if genres else "<no genre>"
-        year = years.year if years else 0
+        year = years.year if years else None
 
         return Track(path, length, artist, album, year, track, title, genre)
 
