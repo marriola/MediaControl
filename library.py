@@ -1,15 +1,10 @@
-import gzip
-import pickle
-from mutagen.id3 import ID3
-import os
 import functools
-import re
 from gi.repository import Gtk, Gdk
+import gzip
 from models import Artist, Album, Track
-
-
-RE_MEDIA = re.compile(".*\.mp3")
-NUMERIC = re.compile("(\d+)")
+from mutagen.id3 import ID3
+import pickle
+import os
 
 
 class Library(object):
@@ -52,60 +47,32 @@ class Library(object):
         
         for root, dirs, files in os.walk(path):
             for file in files:
-                if RE_MEDIA.match(file):
-                    if self.catalog(root + file):
-                        n += 1
+                if file.lower().endswith(".mp3") and self.catalog(root + file):
+                    n += 1
 
-        print("catalogged " + str(n) + " files")
+        print("catalogged " + str(n) + " new tracks")
 
 
     def catalog(self, path):
         if path in self.files:
             return False
 
-        file = ID3(path)
-        tracks = Library.get_value(file.getall("TRCK"))
-        titles = Library.get_value(file.getall("TIT2"))
-        albums = Library.get_value(file.getall("TALB"))
-        artists = Library.get_value(file.getall("TPE1"))
-        years = Library.get_value(file.getall("TDRC"))
-        genres = Library.get_value(file.getall("TCON"))
-
-        if tracks:
-            m = NUMERIC.match(tracks)
-            if m:
-                track = int(m.group(0))
-        else:
-            track = -1    
-        
-        title = titles if titles else "<no title>"
-        album = albums if albums else "<no album>"
-        artist = artists if artists else "<no artist>"
-        genre = genres if genres else "<no genre>"
-        year = years.year if years else 0
-        
         self.files.add(path)
-        track = Track(path, artist, album, year, track, title, genre)
+        id3 = ID3(path)
+        track = Track.from_id3(path, id3)
 
-        if artist not in self.artists:
-            self.artists[artist] = Artist(artist, genre)
-            
-        if album not in self.artists[artist].albums:
-            self.artists[artist].albums[album] = Album(artist, album, genre, year)
+        if track.artist not in self.artists:
+            self.artists[track.artist] = Artist(track.artist, track.genre)
 
-        self.artists[artist].albums[album].tracks.append(track)
+        if track.album not in self.artists[track.artist].albums:
+            self.artists[track.artist].albums[track.album] = Album(track.artist, track.album, track.genre, track.year)
+
+        self.artists[track.artist].albums[track.album].tracks.append(track)
 
         #print("catalogged " + artist + " - " + album + " - " + title + " (" + str(year) + ")")
         return True
 
 
-    @staticmethod
-    def get_value(frames):
-        if len(frames) == 0:
-            return None
-        return frames[0].text[0]
-        
-            
     def build_artists_store(self, store, letter=None):
         if type(letter) is str:
             artists = filter(lambda x: x.name[0].upper() == letter.upper(), map(lambda x: x[1], self.artists.items()))
