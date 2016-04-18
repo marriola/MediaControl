@@ -5,20 +5,21 @@ import re
 NUMERIC = re.compile("(\d+)")
 
 
+def pluralize(n, x):
+    if n == 1:
+        return str(n) + " " + x
+    else:
+        return str(n) + " " + x + "s"
+
+
 class Artist(object):
     def __init__(self, name, genres):
         self.albums = dict()
         self.name = name
         self.genres = genres
 
-    def pluralize(self, n, x):
-        if n == 1:
-            return str(n) + " " + x
-        else:
-            return str(n) + " " + x + "s"
-
     def __str__(self):
-        return self.name + "\n<i>" + self.pluralize(len(self.albums.keys()), "album") + "</i>"
+        return u"{}\n<i>{}</i>".format(self.name, pluralize(len(self.albums.keys()), "album"))
     
 
 class Album(object):
@@ -31,7 +32,7 @@ class Album(object):
 
 
     def __str__(self):
-        return self.title + "\n<b>" + self.artist + "</b>\n" + self.year.__str__()
+        return u"{}\n<b>{}</b>\n{}".format(self.title, self.artist, self.year.__str__())
 
 
 class AllAlbums(Album):
