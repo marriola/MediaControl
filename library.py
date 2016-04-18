@@ -125,4 +125,4 @@ class Library(object):
     
     def create_artist(self, artist):
         return [Gtk.IconTheme.get_default().load_icon("applications-multimedia", self.ICON_SIZE, 0),
-                artist.name]
+                artist.__str__()]

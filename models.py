@@ -11,6 +11,15 @@ class Artist(object):
         self.name = name
         self.genres = genres
 
+    def pluralize(self, n, x):
+        if n == 1:
+            return str(n) + " " + x
+        else:
+            return str(n) + " " + x + "s"
+
+    def __str__(self):
+        return self.name + "\n<i>" + self.pluralize(len(self.albums.keys()), "album") + "</i>"
+    
 
 class Album(object):
     def __init__(self, artist, title, genres, year):

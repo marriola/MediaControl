@@ -2,11 +2,15 @@ import functools
 from gi.repository import Gtk, Gdk
 from library import Library
 from models import Artist, Album
+import os
 from RB import RB
 
 
 ################################################################################
 
+ENV_LIBRARY = os.environ["MUSIC_LIBRARY"] if "MUSIC_LIBRARY" in os.environ else None
+LIBRARY_DIRECTORIES = (map(lambda x: x if x.endswith("/") else x + "/", ENV_LIBRARY.split(";")) if ENV_LIBRARY
+                      else [ "./" ])
 MUSIC_LIBRARY = "musiclib"
 ICON_SIZE = 16
 
@@ -18,7 +22,9 @@ class MediaControl(Gtk.Window):
         self.ignore = False
         self.playing = False
         self.library = library
-        self.library.scan("/home/minebox/")
+        for dir in LIBRARY_DIRECTORIES:
+            print("scanning " + dir)
+            self.library.scan(dir)
         
         self.gladefile = "mcontrol.glade"
         self.glade = Gtk.Builder()
