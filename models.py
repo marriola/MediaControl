@@ -1,3 +1,4 @@
+from mutagen.id3 import ID3
 import re
 
 NUMERIC = re.compile("(\d+)")
@@ -33,7 +34,9 @@ class Track(object):
         self.genre = genre
 
     @staticmethod
-    def from_id3(path, id3):
+    def from_file(path):
+        id3 = ID3(path)
+        
         tracks = Track.get_value(id3.getall("TRCK"))
         titles = Track.get_value(id3.getall("TIT2"))
         albums = Track.get_value(id3.getall("TALB"))

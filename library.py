@@ -2,7 +2,6 @@ import functools
 from gi.repository import Gtk, Gdk
 import gzip
 from models import Artist, Album, Track
-from mutagen.id3 import ID3
 import pickle
 import os
 
@@ -58,8 +57,7 @@ class Library(object):
             return False
 
         self.files.add(path)
-        id3 = ID3(path)
-        track = Track.from_id3(path, id3)
+        track = Track.from_file(path)
 
         if track.artist not in self.artists:
             self.artists[track.artist] = Artist(track.artist, track.genre)
