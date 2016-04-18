@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkTreeStore" id="albumStore">
     <columns>
       <!-- column-name name -->
@@ -27,6 +32,22 @@
     <property name="margin">6</property>
     <property name="item_orientation">horizontal</property>
     <property name="model">artistStore</property>
+  </object>
+  <object class="GtkImage" id="imgAlbum">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">media-optical</property>
+    <style>
+      <class name="letter"/>
+    </style>
+  </object>
+  <object class="GtkImage" id="imgBand">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">band.png</property>
+    <style>
+      <class name="letter"/>
+    </style>
   </object>
   <object class="GtkImage" id="imgForward">
     <property name="visible">True</property>
@@ -66,12 +87,14 @@
   <object class="GtkImage" id="imgShuffle">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-select-all</property>
+    <property name="pixbuf">shuffle.png</property>
   </object>
   <object class="GtkWindow" id="winMControl">
-    <property name="width_request">480</property>
+    <property name="width_request">410</property>
     <property name="height_request">320</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">False</property>
+    <property name="vexpand">False</property>
     <property name="resizable">False</property>
     <property name="default_width">320</property>
     <property name="default_height">480</property>
@@ -87,591 +110,13 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkGrid" id="gridLetters">
-            <property name="width_request">64</property>
-            <property name="height_request">320</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">8</property>
-            <property name="row_homogeneous">True</property>
-            <property name="column_homogeneous">True</property>
-            <child>
-              <object class="GtkButton" id="btnSymbol">
-                <property name="label" translatable="yes">@</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnZ">
-                <property name="label" translatable="yes">Z</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnNumber">
-                <property name="label" translatable="yes">#</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnA">
-                <property name="label" translatable="yes">A</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnB">
-                <property name="label" translatable="yes">B</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnC">
-                <property name="label" translatable="yes">C</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnD">
-                <property name="label" translatable="yes">D</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnE">
-                <property name="label" translatable="yes">E</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnF">
-                <property name="label" translatable="yes">F</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnG">
-                <property name="label" translatable="yes">G</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnY">
-                <property name="label" translatable="yes">Y</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnH">
-                <property name="label" translatable="yes">H</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnI">
-                <property name="label" translatable="yes">I</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnJ">
-                <property name="label" translatable="yes">J</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnK">
-                <property name="label" translatable="yes">K</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnL">
-                <property name="label" translatable="yes">L</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnM">
-                <property name="label" translatable="yes">M</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnN">
-                <property name="label" translatable="yes">N</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnO">
-                <property name="label" translatable="yes">O</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnP">
-                <property name="label" translatable="yes">P</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnQ">
-                <property name="label" translatable="yes">Q</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnR">
-                <property name="label" translatable="yes">R</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnS">
-                <property name="label" translatable="yes">S</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnT">
-                <property name="label" translatable="yes">T</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnU">
-                <property name="label" translatable="yes">U</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnV">
-                <property name="label" translatable="yes">V</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnW">
-                <property name="label" translatable="yes">W</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnX">
-                <property name="label" translatable="yes">X</property>
-                <property name="width_request">22</property>
-                <property name="height_request">16</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <style>
-                  <class name="letter"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <style>
-              <class name="letter-grid"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkBox" id="box2">
-            <property name="width_request">416</property>
+            <property name="width_request">352</property>
             <property name="height_request">320</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow1">
@@ -705,8 +150,7 @@
             </child>
             <child>
               <object class="GtkGrid" id="grid1">
-                <property name="width_request">416</property>
-                <property name="height_request">38</property>
+                <property name="width_request">352</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="column_homogeneous">True</property>
@@ -716,6 +160,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgRewind</property>
+                    <property name="relief">none</property>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -730,7 +178,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgPlay</property>
+                    <property name="relief">none</property>
                     <signal name="clicked" handler="btnPlayPause_clicked" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -745,6 +197,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgForward</property>
+                    <property name="relief">none</property>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -759,6 +215,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgNext</property>
+                    <property name="relief">none</property>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -773,6 +233,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgRepeat</property>
+                    <property name="relief">none</property>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -787,6 +251,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgShuffle</property>
+                    <property name="relief">none</property>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">6</property>
@@ -801,6 +269,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imgPrevious</property>
+                    <property name="relief">none</property>
+                    <style>
+                      <class name="letter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -809,6 +281,9 @@
                     <property name="height">1</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="letter-grid"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -816,9 +291,719 @@
                 <property name="position">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkScrollbar" id="scrPosition">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="adjustment">adjustment1</property>
+                <property name="fill_level">100</property>
+                <style>
+                  <class name="letter"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid3">
+            <property name="width_request">128</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkGrid" id="grid4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_homogeneous">True</property>
+                <child>
+                  <object class="GtkToggleButton" id="tglBand">
+                    <property name="height_request">43</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">imgBand</property>
+                    <property name="relief">none</property>
+                    <property name="xalign">0.56999999284744263</property>
+                    <property name="active">True</property>
+                    <signal name="toggled" handler="toggle_filter_mode" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="tglAlbum">
+                    <property name="height_request">43</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">imgAlbum</property>
+                    <property name="relief">none</property>
+                    <signal name="toggled" handler="toggle_filter_mode" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="gridLetters">
+                <property name="width_request">128</property>
+                <property name="height_request">238</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">8</property>
+                <property name="resize_mode">immediate</property>
+                <property name="row_homogeneous">True</property>
+                <property name="column_homogeneous">True</property>
+                <child>
+                  <object class="GtkButton" id="btnSymbol">
+                    <property name="label" translatable="yes">@</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_symbol" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnZ">
+                    <property name="label" translatable="yes">Z</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnNumber">
+                    <property name="label" translatable="yes">#</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_number" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnA">
+                    <property name="label" translatable="yes">A</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnB">
+                    <property name="label" translatable="yes">B</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnC">
+                    <property name="label" translatable="yes">C</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnD">
+                    <property name="label" translatable="yes">D</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnE">
+                    <property name="label" translatable="yes">E</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnF">
+                    <property name="label" translatable="yes">F</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnG">
+                    <property name="label" translatable="yes">G</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnY">
+                    <property name="label" translatable="yes">Y</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnH">
+                    <property name="label" translatable="yes">H</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnI">
+                    <property name="label" translatable="yes">I</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnJ">
+                    <property name="label" translatable="yes">J</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnK">
+                    <property name="label" translatable="yes">K</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnL">
+                    <property name="label" translatable="yes">L</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnM">
+                    <property name="label" translatable="yes">M</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnN">
+                    <property name="label" translatable="yes">N</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnO">
+                    <property name="label" translatable="yes">O</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnP">
+                    <property name="label" translatable="yes">P</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnQ">
+                    <property name="label" translatable="yes">Q</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnR">
+                    <property name="label" translatable="yes">R</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnS">
+                    <property name="label" translatable="yes">S</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnT">
+                    <property name="label" translatable="yes">T</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnU">
+                    <property name="label" translatable="yes">U</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnV">
+                    <property name="label" translatable="yes">V</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">5</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnW">
+                    <property name="label" translatable="yes">W</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnX">
+                    <property name="label" translatable="yes">X</property>
+                    <property name="width_request">22</property>
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="clicked" handler="filter_letter" swapped="no"/>
+                    <style>
+                      <class name="letter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <style>
+                  <class name="letter-grid"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnAll">
+                <property name="label" translatable="yes">All</property>
+                <property name="height_request">29</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <signal name="clicked" handler="filter_all" swapped="no"/>
+                <style>
+                  <class name="letter"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <style>
+              <class name="letter-grid"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
             <property name="top_attach">0</property>
             <property name="width">1</property>
             <property name="height">1</property>
