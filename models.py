@@ -1,4 +1,5 @@
 from mutagen.id3 import ID3
+from mutagen.mp3 import MP3
 import re
 
 NUMERIC = re.compile("(\d+)")
@@ -24,8 +25,9 @@ class Album(object):
 
 
 class Track(object):
-    def __init__(self, path, artist, album, year, track, title, genre):
+    def __init__(self, path, length, artist, album, year, track, title, genre):
         self.path = path
+        self.length = length
         self.artist = artist
         self.album = album
         self.year = year
@@ -35,6 +37,9 @@ class Track(object):
 
     @staticmethod
     def from_file(path):
+        mp3 = MP3(path)
+        length = mp3.info.length
+
         id3 = ID3(path)
         
         tracks = Track.get_value(id3.getall("TRCK"))
@@ -57,7 +62,7 @@ class Track(object):
         genre = genres if genres else "<no genre>"
         year = years.year if years else 0
 
-        return Track(path, artist, album, year, track, title, genre)
+        return Track(path, length, artist, album, year, track, title, genre)
 
 
     @staticmethod

@@ -56,8 +56,11 @@ class Library(object):
         if path in self.files:
             return False
 
-        self.files.add(path)
-        track = Track.from_file(path)
+        try:
+            track = Track.from_file(path)
+            self.files.add(path)
+        except Exception as e:
+            print("catalog failed (" + path + "): " + e.__str__())
 
         if track.artist not in self.artists:
             self.artists[track.artist] = Artist(track.artist, track.genre)
@@ -67,7 +70,7 @@ class Library(object):
 
         self.artists[track.artist].albums[track.album].tracks.append(track)
 
-        #print("catalogged " + artist + " - " + album + " - " + title + " (" + str(year) + ")")
+        print("catalogged " + track.artist + " - " + track.album + " - " + track.title + " [" + str(track.length) + "] (" + str(track.year) + ")")
         return True
 
 
