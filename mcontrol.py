@@ -26,6 +26,8 @@ class MediaControl(Gtk.Window):
             print("scanning " + dir)
             self.library.scan(dir)
         
+        Gtk.IconTheme.add_builtin_icon("band16", 16, Gtk.Image.new_from_file("band16.png").get_pixbuf())
+
         self.gladefile = "mcontrol.glade"
         self.glade = Gtk.Builder()
         self.glade.add_from_file(self.gladefile)
