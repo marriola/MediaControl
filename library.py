@@ -1,3 +1,5 @@
+import gzip
+import pickle
 from mutagen.id3 import ID3
 import os
 import functools
@@ -13,26 +15,54 @@ NUMERIC = re.compile("(\d+)")
 class Library(object):
     def __init__(self, iconSize):
         self.ICON_SIZE = iconSize
+        self.files = set()
         self.artists = dict()
 
-    def load(self, path):
-        for i in range(0, 10):
-            x = Artist(chr(i + 66) + "aa", "Rock")
-            for k in range(11, 20):
-                y = Album(x.name, chr(k + 66) + "eezoo", "Rock", 2000 + k)
-                x.albums[y.title] = y
-            
-            self.artists[x.name] = x
 
+    def save(self, path):
+        try:
+            f = gzip.open(path, "wb")
+            p = pickle.Pickler(f)
+            p.dump(self.files)
+            p.dump(self.artists)
+            f.close()
+            return True
+            
+        except:
+            return False
+
+        
+    def load(self, path):
+        try:
+            f = gzip.open(path, "rb")
+            up = pickle.Unpickler(f)
+            self.files = up.load()
+            self.artists = up.load()
+            f.close()
+            print("loaded " + str(len(self.files)) + " tracks")
+            return True
+        
+        except Exception as e:
+            print("load:" + e.__str__())
+            return False
+        
 
     def populate(self, path):
+        n = 0
+        
         for root, dirs, files in os.walk(path):
             for file in files:
                 if RE_MEDIA.match(file):
-                    self.catalog(root + file)
+                    if self.catalog(root + file):
+                        n += 1
+
+        print("catalogged " + str(n) + " files")
 
 
     def catalog(self, path):
+        if path in self.files:
+            return False
+
         file = ID3(path)
         tracks = Library.get_value(file.getall("TRCK"))
         titles = Library.get_value(file.getall("TIT2"))
@@ -54,7 +84,8 @@ class Library(object):
         genre = genres if genres else "<no genre>"
         year = years.year if years else 0
         
-        track = Track(artist, album, year, track, title, genre)
+        self.files.add(path)
+        track = Track(path, artist, album, year, track, title, genre)
 
         if artist not in self.artists:
             self.artists[artist] = Artist(artist, genre)
@@ -65,6 +96,7 @@ class Library(object):
         self.artists[artist].albums[album].tracks.append(track)
 
         #print("catalogged " + artist + " - " + album + " - " + title + " (" + str(year) + ")")
+        return True
 
 
     @staticmethod

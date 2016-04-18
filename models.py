@@ -18,7 +18,8 @@ class Album(object):
 
 
 class Track(object):
-    def __init__(self, artist, album, year, track, title, genre):
+    def __init__(self, path, artist, album, year, track, title, genre):
+        self.path = path
         self.artist = artist
         self.album = album
         self.year = year

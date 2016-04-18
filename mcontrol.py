@@ -7,6 +7,7 @@ from RB import RB
 
 ################################################################################
 
+MUSIC_LIBRARY = "musiclib"
 ICON_SIZE = 16
 
 
@@ -103,6 +104,7 @@ class MediaControl(Gtk.Window):
         
         
     def winMControl_hide(self, sender):
+        self.library.save(MUSIC_LIBRARY)
         Gtk.main_quit()
 
 
@@ -110,7 +112,7 @@ class MediaControl(Gtk.Window):
 
 if __name__ == "__main__":
     library = Library(ICON_SIZE)
-    library.load("file")
+    library.load(MUSIC_LIBRARY)
     #RB.start()
     win = MediaControl(library)
     Gtk.main()
