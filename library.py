@@ -41,7 +41,7 @@ class Library(object):
             return False
         
 
-    def populate(self, path):
+    def scan(self, path):
         n = 0
         
         for root, dirs, files in os.walk(path):

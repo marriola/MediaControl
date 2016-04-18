@@ -18,7 +18,7 @@ class MediaControl(Gtk.Window):
         self.ignore = False
         self.playing = False
         self.library = library
-        self.library.populate("/home/minebox/")
+        self.library.scan("/home/minebox/")
         
         self.gladefile = "mcontrol.glade"
         self.glade = Gtk.Builder()
