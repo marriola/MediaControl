@@ -1,7 +1,7 @@
 import functools
 from gi.repository import Gtk, Gdk
 import gzip
-from models import Artist, Album, Track
+from models import Artist, Album, Track, AllAlbums
 import pickle
 import os
 
@@ -88,33 +88,41 @@ class Library(object):
         else:
             filter_fun = lambda x: True
 
-        artists = filter(filter_fun, map(lambda x: x[1], self.artists.items()))
-            
+        self.artists_store = filter(filter_fun, map(lambda x: x[1], self.artists.items()))
+        self.artists_store.sort(key=lambda x: x.name)
+        
         store.clear()
-        for artist in artists:
+        for artist in self.artists_store:
             store.append(None, self.create_artist(artist))
 
             
     def build_albums_store(self, store, letter=None):
+        artist_filter = False
+        
         if letter == None:
             filter_fun = lambda x: True
         elif callable(letter):
             filter_fun = letter
-        elif type(letter) is str:
-            filter_fun = lambda x: x.title[0].upper() == letter.upper()
+        elif type(letter) is str or type(letter) is unicode:
+            if len(letter) == 1:
+                filter_fun = lambda x: x.title[0].upper() == letter.upper()
+            else:
+                artist_filter = True
+                filter_fun = lambda x: x.artist.upper() == letter.upper()
         else:
             filter_fun = None
         
-        #albums = filter(filter_fun, reduce(lambda acc, val: dict(({} if acc == None else acc), **val.albums), self.artists, {}))
-        albums = filter(filter_fun,
+        self.albums_store = filter(filter_fun,
                         reduce(lambda acc, val: ([] if acc == None else acc) + map(lambda x: x[1], val.albums.items()),
                                map(lambda x: x[1], self.artists.items()),
                                []))
-        albums.sort(key=lambda x: x.title)
+        self.albums_store.sort(key=lambda x: x.year)
+
+        if artist_filter:
+            self.albums_store = [AllAlbums()] + self.albums_store
         
         store.clear()
-        for album in albums:
-            #print("adding " + album.artist + " - " + album.title)
+        for album in self.albums_store:
             store.append(None, self.create_album(album))
 
             

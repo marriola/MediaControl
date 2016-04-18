@@ -65,6 +65,14 @@ class MediaControl(Gtk.Window):
         self.window.present()
 
 
+    def set_filter_mode(self, setting):
+        self.ignore = True
+        self.tglAlbum.set_active(setting)
+        self.ignore = True
+        self.tglBand.set_active(not setting)
+        self.filter_mode = setting
+        
+
     def toggle_filter_mode(self, button):
         #print("toggle filter")
         if self.ignore:
@@ -110,7 +118,19 @@ class MediaControl(Gtk.Window):
     def filter_letter(self, button):
         filter_char = button.get_label()
         self.do_filter(filter_char)
-        
+
+
+    def item_activated(self, iconview, path):
+        index = int(path.to_string())
+        if self.filter_mode:
+            album = self.library.albums_store[index]
+            print("tap album: " + album.artist + " - " + album.title)
+        else:
+            artist = self.library.artists_store[index]
+            print("tap artist: " + artist.name)
+            self.set_filter_mode(True)
+            self.do_filter(self.library.artists_store[index].name)
+    
         
     def winMControl_hide(self, sender):
         self.library.save(MUSIC_LIBRARY)

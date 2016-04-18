@@ -34,6 +34,15 @@ class Album(object):
         return self.title + "\n<b>" + self.artist + "</b>\n" + self.year.__str__()
 
 
+class AllAlbums(Album):
+    def __init__(self):
+        super(AllAlbums, self).__init__("*", "*", "*", None)
+
+
+    def __str__(self):
+        return "<i>All albums</i>"
+    
+
 class Track(object):
     def __init__(self, path, length, artist, album, year, track, title, genre):
         self.path = path

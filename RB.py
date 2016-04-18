@@ -29,6 +29,7 @@ class RB(object):
         
     @staticmethod
     def play_file(file):
+        RB.command("clear-queue")
         RB.command("play-uri=" + file)
 
     @staticmethod
