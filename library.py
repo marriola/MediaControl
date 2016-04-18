@@ -119,7 +119,7 @@ class Library(object):
         self.albums_store.sort(key=lambda x: x.year)
 
         if artist_filter:
-            self.albums_store = [AllAlbums()] + self.albums_store
+            self.albums_store = [AllAlbums(letter)] + self.albums_store
         
         store.clear()
         for album in self.albums_store:

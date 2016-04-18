@@ -35,8 +35,8 @@ class Album(object):
 
 
 class AllAlbums(Album):
-    def __init__(self):
-        super(AllAlbums, self).__init__("*", "*", "*", None)
+    def __init__(self, artist="*"):
+        super(AllAlbums, self).__init__(artist, "*", "*", None)
 
 
     def __str__(self):
