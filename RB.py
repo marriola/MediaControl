@@ -51,3 +51,14 @@ class RB(object):
     @staticmethod
     def enqueue(tracks):
         RB.command("enqueue", *tracks)
+
+
+    @staticmethod
+    def begin_seek():
+        RB.command("pause")
+
+
+    @staticmethod
+    def end_seek(time):
+        RB.command("seek", str(time))
+        RB.command("play")

@@ -1,5 +1,5 @@
 import functools
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 from library import Library
 from models import Artist, Album
 import os
@@ -16,6 +16,11 @@ ICON_SIZE = 16
 
 ################################################################################
 
+def seconds_to_min_seconds(seconds):
+    minutes = seconds // 60
+    seconds = seconds % 60
+    return "{:02d}:{:02d}".format(int(minutes), int(seconds))
+
 
 def homogenous_artist(track_list):
     first = track_list[0].artist
@@ -29,6 +34,7 @@ def homogenous_album(track_list):
 
 class MediaControl(Gtk.Window):
     def __init__(self, library):
+        self.timer = None
         self.ignore = False
         self.playing = False
         self.library = library
@@ -47,6 +53,9 @@ class MediaControl(Gtk.Window):
         self.window.resize(480, 320)
         self.window.set_resizable(False)
 
+        self.scaleTime = self.glade.get_object("scaleTime")
+        self.lblTime = self.glade.get_object("lblTime")
+        
         self.btnSymbol = self.glade.get_object("btnSymbol")
         self.btnNumber = self.glade.get_object("btnNumber")
         self.buttons = map(lambda x: self.glade.get_object("btn" + x), list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
@@ -131,11 +140,34 @@ class MediaControl(Gtk.Window):
 
         self.filter_mode = self.tglAlbum.get_active()
         self.do_filter()
+
+
+    def set_timer(self):
+        self.timer_suspended = False
+        self.timer = GLib.timeout_add_seconds(1, lambda x: self.increment_scroll(x), None)
+
+
+    def update_time(self):
+        time_in = self.scaleTime.get_value()
+        time_total = self.scaleTime.get_adjustment().get_upper()
+        self.lblTime.set_label("{}/{}".format(seconds_to_min_seconds(time_in), seconds_to_min_seconds(time_total)))
             
         
-    def btnPlayPause_clicked(self, button):
+    def increment_scroll(self, data):
+        self.scaleTime.set_value(self.scaleTime.get_value() + 1)
+        self.update_time()
+        return True
+
+
+    def toggle_playing(self):
         self.playing = not self.playing
+        if self.playing:
+            self.set_timer()
         self.btnPlayPause.set_image(self.imgPause if self.playing else self.imgPlay)
+
+    
+    def btnPlayPause_clicked(self, button):
+        self.toggle_playing()
 
 
     def do_filter(self, filter=None, album=None):
@@ -176,6 +208,7 @@ class MediaControl(Gtk.Window):
     def track_tapped(self, tree_view, path, column):
         index = int(path.to_string())
         RB.play_file(self.library.track_store_list[index].path)
+        self.toggle_playing()
         
 
     def item_activated(self, iconview, path):
@@ -191,6 +224,28 @@ class MediaControl(Gtk.Window):
             self.do_filter(self.library.artists_store[index].name)
     
         
+    def scaleTime_value_changed(self, widget):
+        if not self.timer_suspended:
+            RB.begin_seek()
+            GLib.Source.remove(self.timer)
+            self.timer = None
+            self.timer_suspended = True
+
+        self.update_time()
+
+
+    def scaleTime_key_release(self, widget, event):
+        if self.timer_suspended:
+            self.set_timer()
+            RB.end_seek(self.scaleTime.get_value())
+
+
+    def scaleTime_button_release(self, widget, event):
+        if self.timer_suspended:
+            self.set_timer()
+            RB.end_seek(self.scaleTime.get_value())
+            
+
     def winMControl_hide(self, sender):
         self.library.save(MUSIC_LIBRARY)
         Gtk.main_quit()
