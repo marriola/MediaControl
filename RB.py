@@ -1,64 +1,132 @@
+import dbus
 import subprocess
 
-class RB(object):
-    @staticmethod
-    def command(*args):
-        if len(args) > 0:
-            params = ["--" + args[0]] + list(args)[1:]
-        else:
-            params = []
-            
-        subprocess.call(["rhythmbox-client"] + params)
+db = dbus.SessionBus()
+position_before_seek = None
+proxy_obj = None
+rhythmbox = None
+player = None
+props = None
 
-    @staticmethod
-    def start():
-        RB.command()
-        #RB.command("clear-queue")
+
+def set(interface, prop, value):
+    if player == None:
+        return
+    props.Set('org.mpris.MediaPlayer2.' + interface, prop, value)
+
+    
+def get(interface, prop):
+    if player == None:
+        return None
+    return props.Get('org.mpris.MediaPlayer2.' + interface, prop)
+
+
+def start():
+    global proxy_obj, rhythmbox, player, props
+    subprocess.call("rhythmbox-client")
+    proxy_obj = db.get_object('org.mpris.MediaPlayer2.rhythmbox', '/org/mpris/MediaPlayer2')
+    player = dbus.Interface(proxy_obj, 'org.mpris.MediaPlayer2.Player')
+    playlists = dbus.Interface(proxy_obj, 'org.mpris.MediaPlayer2.Playlists')
+    rhythmbox = dbus.Interface(proxy_obj, 'org.mpris.MediaPlayer2')
+    props = dbus.Interface(proxy_obj, 'org.freedesktop.Dbus.Properties')
+
+    
+def quit():
+    if rhythmbox:
+        rhythmbox.Quit()
+
         
-    @staticmethod
-    def play_pause():
-        RB.command("play-pause")
-
-    @staticmethod
-    def play():
-        RB.command("play")
-
-    @staticmethod
-    def pause():
-        RB.command("pause")
-        
-    @staticmethod
-    def play_file(file):
-        RB.command("clear-queue")
-        RB.command("play-uri=" + file)
-
-    @staticmethod
-    def seek(seconds):
-        RB.command("seek", seconds.__str__())
-
-    @staticmethod    
-    def volume(level):
-        RB.command("set-volume", level.__str__())
-
-    @staticmethod
-    def next():
-        RB.command("next")
-
-    @staticmethod
-    def previous():
-        RB.command("previous")
-
-    @staticmethod
-    def enqueue(tracks):
-        RB.command("enqueue", *tracks)
+def get_playlists():
+    if playlists == None:
+        return None
+    return playlists.GetPlaylists(0, 9999, "Alphabetical", False)
 
 
-    @staticmethod
-    def begin_seek():
-        RB.command("pause")
+
+def get_play_queue():
+    if playlists == None:
+        return None
+    return
 
 
-    @staticmethod
-    def end_seek(time):
-        RB.command("seek", str(time))
-        RB.command("play")
+def play_pause():
+    if player == None:
+        return
+    player.PlayPause()
+
+    
+def play():
+    if player == None:
+        return
+    player.Play()
+
+    
+def pause():
+    if player == None:
+        return
+    player.Pause()
+
+    
+def stop():
+    if player == None:
+        return
+    player.Stop()
+
+    
+def play_file(file):    
+    if player == None:
+        return
+    player.OpenUri("file://" + file)
+
+    
+def seek(seconds):
+    if player == None:
+        return
+    player.Seek(seconds * 1000000)
+
+    
+def volume(level):
+    if player == None:
+        return
+    set("Player", "Volume", level / 100)
+
+    
+def get_volume():
+    if player == None:
+        return None
+    return get("Player", "Volume")
+
+
+def get_position():
+    if player == None:
+        return None
+    return get("Player", "Position")
+
+
+def next():
+    if player == None:
+        return
+    player.Next()
+
+    
+def previous():
+    if player == None:
+        return
+    player.Previous()
+
+    
+def begin_seek():
+    global position_before_seek
+    if player == None:
+        return
+    position_before_seek = int(get_position()) / 1000000
+    pause()
+
+
+def end_seek(time):
+    if player == None:
+        return
+    position_now = time / 1000000
+    seek(position_now - position_before_seek)
+    position_before_seek = None
+    play()
