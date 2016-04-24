@@ -28,7 +28,7 @@ def start():
     player = dbus.Interface(proxy_obj, 'org.mpris.MediaPlayer2.Player')
     playlists = dbus.Interface(proxy_obj, 'org.mpris.MediaPlayer2.Playlists')
     rhythmbox = dbus.Interface(proxy_obj, 'org.mpris.MediaPlayer2')
-    props = dbus.Interface(proxy_obj, 'org.freedesktop.Dbus.Properties')
+    props = dbus.Interface(proxy_obj, 'org.freedesktop.DBus.Properties')
 
     
 def quit():
@@ -85,7 +85,7 @@ def seek(seconds):
     player.Seek(seconds * 1000000)
 
     
-def volume(level):
+def set_volume(level):
     if player == None:
         return
     set("Player", "Volume", level / 100)
@@ -94,13 +94,13 @@ def volume(level):
 def get_volume():
     if player == None:
         return None
-    return get("Player", "Volume")
+    return get("Player", "Volume") * 100
 
 
 def get_position():
     if player == None:
         return None
-    return get("Player", "Position")
+    return get("Player", "Position") / 1000000
 
 
 def next():
@@ -119,14 +119,16 @@ def begin_seek():
     global position_before_seek
     if player == None:
         return
-    position_before_seek = int(get_position()) / 1000000
+    position_before_seek = int(get_position())
     pause()
 
 
 def end_seek(time):
+    global position_before_seek
     if player == None:
         return
-    position_now = time / 1000000
+    position_now = time
+    print("seek to", position_now, "from", position_before_seek)
     seek(position_now - position_before_seek)
     position_before_seek = None
     play()

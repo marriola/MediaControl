@@ -23,6 +23,9 @@ class Artist(object):
     
 
 class Album(object):
+    """
+    An album. Either of the artist or title properties may be "*"
+    """
     def __init__(self, artist, title, genres, year):
         self.artist = artist
         self.title = title
@@ -36,6 +39,9 @@ class Album(object):
 
 
 class AllAlbums(Album):
+    """
+    A special "All Albums" entry that displays all of an artist's albums
+    """
     def __init__(self, artist="*"):
         super(AllAlbums, self).__init__(artist, "*", "*", None)
 
@@ -46,6 +52,9 @@ class AllAlbums(Album):
 
 class Track(object):
     def __init__(self, path, length, artist, album, year, track, title, genre):
+        """
+        length is in seconds
+        """
         self.path = path
         self.length = length
         self.artist = artist.strip() if artist else artist
