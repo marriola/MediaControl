@@ -24,7 +24,7 @@ class Artist(object):
 
 class Album(object):
     """
-    An album. Either of the artist or title properties may be "*"
+    An album. The artist or title properties may be set to "*" for filtering
     """
     def __init__(self, artist, title, genres, year):
         self.artist = artist
