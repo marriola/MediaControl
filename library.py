@@ -112,12 +112,14 @@ class Library(object):
         return [track.track, track.title, track.album, track.year, track.artist]
         
 
-    # list_filter type
-    # ------------------------------
-    # None              No filter
-    # function          The artist object is passed as a parameter for each artist. Returns True if the artist should be included.
-    # string (1 char)   Artists beginning with that letter are filtered
     def build_artists_store(self, store, list_filter=None):
+        """
+        list_filter type
+        ------------------------------
+        None              No filter
+        function          The artist object is passed as a parameter for each artist. Returns True if the artist should be included.
+        string (1 char)   Artists beginning with that letter are filtered
+        """
         if type(list_filter) is str:
             filter_fun = lambda x: x.name[0].upper() == list_filter.upper()
         elif callable(list_filter):
@@ -133,13 +135,15 @@ class Library(object):
             store.append(None, self.create_artist(artist))
 
             
-    # list_filter type
-    # ------------------------------
-    # None              No filter
-    # function          The album object is passed as a parameter for each album. Returns True if the album should be included.
-    # string (1 char)   Albums beginning with that letter are filtered
-    # string (2+ chars) Albums by that artist are shown
     def build_albums_store(self, store, list_filter=None):
+        """
+        list_filter type
+        ------------------------------
+        None              No filter
+        function          The album object is passed as a parameter for each album. Returns True if the album should be included.
+        string (1 char)   Albums beginning with that letter are filtered
+        string (2+ chars) Albums by that artist are shown
+        """
         artist_filter = False
         
         if list_filter == None:
